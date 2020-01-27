@@ -3,8 +3,6 @@
 #Tarefa pra casa:
     #Métodos de Score
 
-
-
 # face verification with the VGGFace2 model
 from PIL import Image
 from glob import glob
@@ -26,8 +24,10 @@ from keras_vggface import utils
 import numpy as np
 from keras.preprocessing import image
 from sklearn.preprocessing import normalize
+import random
 
-direc_dataset = "/media/vitor/SHARE/DEV/Visão Computacional/dataset/lfw_eleicao" #pasta contendo a pasta de cada pessoa
+direc_dataset = "/media/vitor/SHARE/DEV/Visão Computacional/dataset/lfw_eleicao_test1" #pasta contendo a pasta de cada pessoa
+date_save = "240120201520" # adicionar aqui a data e hora de realização do teste para salvar os dados correspondentes
 
 def euclideanDistance(base, teste):
     var = base - teste
@@ -99,7 +99,6 @@ def dif_person(photo_1, photo_2, name_photo_1, name_photo_2, direc_dataset):
     print("dist vgg2 ->", dist_vgg2)
 
             
-
 def same_person(path_person_list, name_person, direc_dataset):
 
     print("\nSame Person = "+name_person)
@@ -132,90 +131,96 @@ def ger_pessoas(direc_dataset):
     
     all_persons = os.listdir(direc_dataset) # recebe o nome de cada pasta, onde se encontra cada pessoa
     name_person = [] #cria uma lista onde iremos armazenar o nome de cada pessoa (nome da pasta)
-    #print(all_persons)
+    print(all_persons)
     
-    print("\n=============== *Same peoples* =================")
+    # print("\n=============== *Same peoples* =================")
 
-    for i in range(len(all_persons)): # define quantas pastas serão percorridas
-        name_person = all_persons[i] # a lista name_person recebe como parametro o nome correspondente na lista all_persons
+    # for i in range(len(all_persons)): # define quantas pastas serão percorridas
+    #     name_person = all_persons[i] # a lista name_person recebe como parametro o nome correspondente na lista all_persons
         
-        path_person_list = os.listdir(direc_dataset+"/"+name_person) #lista o diretorio da pessoa
-        len_by_person = len(path_person_list) #guarda a quantidade de fotos contida em sua respectiva pasta
+    #     path_person_list = os.listdir(direc_dataset+"/"+name_person) # lista o diretorio da pessoa
+    #     len_by_person = len(path_person_list) # guarda a quantidade de fotos contida em sua respectiva pasta
 
-        if len_by_person > 1:
-            cont = same_person(path_person_list, name_person, direc_dataset)
+    #     if len_by_person > 1:
+    #         cont = same_person(path_person_list, name_person, direc_dataset)
 
-    array_all_pic = [] # array contendo todas as fotos     
-    
-    # aqui junto todas as fotos do dataset em um único vetor
-    for i in range(20): # range(len(all_persons))
-        name_person = all_persons[i]
-        list_1 = os.listdir(direc_dataset+"/"+name_person) #lista o diretorio da pessoa
-
-        array_all_pic = np.concatenate((array_all_pic, list_1))
-
-    data_face2_igual = np.asarray(face2_igual)
-    np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/data_face2_igual_01122259', data_face2_igual) # salva os arrays de distancia
+    # # Save the data as array 
+    # data_face2_igual = np.asarray(face2_igual)
+    # np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/data_face2_igual_'+date_save, data_face2_igual) # salva os arrays de distancia
 
     print("\n=============== *Different peoples* =================")
 
-    for i in range(cont):
+    array_all_pic = [] # array contendo todas as fotos    
 
-        photo_1 = randint(0, cont) # recebe um numero aleatorio
-        photo_2 = randint(0, cont)
+    # aqui junto todas as fotos do dataset em um único vetor
+    for i in range(len(all_persons)): # pode demorar muito dependendo da quantidade de combinações
+        name_person = all_persons[i]
+        path_person_list = os.listdir(direc_dataset+"/"+name_person) # lista o diretorio da pessoa
 
-        photo_1 = array_all_pic[photo_1] # a photo_1 vai ser a photo q se encontra na posição do numero aleatorio no array que contem todas as fotos
-        photo_2 = array_all_pic[photo_2]
+        array_all_pic.append(path_person_list)
 
-        name_photo_1 = photo_1[:-9] # fatia a string eliminando o últimos 9 caracteres, que contem o nome da pasta de cada pessoa
-        name_photo_2 = photo_2[:-9]
+    print(array_all_pic)
+    print(array_all_pic[0])
+    print(array_all_pic[3])
 
-        dif_person(photo_1, photo_2, name_photo_1, name_photo_2, direc_dataset)
+    # name_photo_1 = photo_1[:-9] # fatia a string eliminando o últimos 9 caracteres, que contem o nome da pasta de cada pessoa, restando apenas o nome
+    # number_photo_1 = photo_1[-8:-4] # fatia a string, gravando apenas o número da foto
+
+    # print(name_photo_1)
+    # print(number_photo_1)
+
+    # Dict[name_photo_1] = number_photo_1
+
+    # list_all_compara = []
+
+    # for i in range(20):
+        
+    #     photo_1_pos = randint(0, len(array_all_pic)-1) # recebe um numero aleatorio que indicará qual imagem (na lista de todas as imagens) iremos usar para a comparação
+    #     photo_1 = array_all_pic[photo_1_pos] # a photo_1 vai ser a photo que se encontra na posição do numero aleatorio no array que contem todas as fotos
+
+    #     photo_2_pos = randint(0, len(array_all_pic)-1) # recebe um numero aleatorio que indicará qual imagem (na lista de todas as imagens) iremos usar para a comparação
+    #     photo_2 = array_all_pic[photo_2_pos] # a photo_1 vai ser a photo que se encontra na posição do numero aleatorio no array que contem todas as fotos
+
+    #     list_all_compara.append()
+        
+
+    #     print(list_all_compara)
+
+        # photo_2_pos = randint(0, len(array_all_pic)-1)
+
+        # print(photo_1_pos)
+        # print(photo_2_pos)
+
+        # photo_1 = array_all_pic[photo_1_pos] # a photo_1 vai ser a photo que se encontra na posição do numero aleatorio no array que contem todas as fotos
+        # photo_2 = array_all_pic[photo_2_pos]
+
+        # name_photo_1 = photo_1[:-9] # fatia a string eliminando o últimos 9 caracteres, que contem o nome da pasta de cada pessoa, restando apenas o nome
+        # name_photo_2 = photo_2[:-9]
+
+        # print("Pessoa 1: "+name_photo_1)
+        # print("Pessoa 2: "+name_photo_2)
+
+
+    #     dif_person(photo_1, photo_2, name_photo_1, name_photo_2, direc_dataset)
 
     # print("\nLista VGGFace2 de faces iguais\n", face2_igual)
-    # print("Lista VGGFace de faces iguais\n", face_igual)
+    # # print("Lista VGGFace de faces iguais\n", face_igual)
 
     # print("\nLista VGGFace2 de faces diferentes\n", face2_outro)
-    # print("Lista VGGFace2 de faces diferentes\n", face_outro)
+    # # print("Lista VGGFace2 de faces diferentes\n", face_outro)
 
-    # data_face_igual = np.asarray(face_igual)
-    # data_face_outro = np.asarray(face_outro)
-    data_face2_outro = np.asarray(face2_outro)
+    # # data_face_igual = np.asarray(face_igual)
+    # # data_face_outro = np.asarray(face_outro)
 
-    print(cont)
+    # # Save the data as array 
+    # data_face2_outro = np.asarray(face2_outro)
+
+    # print(cont)
     
     # np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/data_face_igual_01121625', data_face_igual)
     # np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/data_face_outro_01121625', data_face_outro)
-    np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/data_face2_outro_011620201005', data_face2_outro)
+    # np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/data_face2_outro_'+date_save, data_face2_outro)
 
 
 ger_pessoas(direc_dataset)
 
-
-# plt.subplot(1,2,1)
-
-# plt.xlabel("Distância Euclidiana", fontsize=15)
-# plt.ylabel("Frequencia", fontsize=15)
-# plt.title("VGG FACE")
-
-# plt.hist(face_igual, facecolor='blue')
-# plt.hist(face_outro, facecolor='red')
-
-# plt.subplot(1,2,2)
-
-# plt.xlabel("Distância Euclidiana", fontsize=15)
-# plt.ylabel("Frequencia", fontsize=15)
-# plt.title("VGG FACE 2")
-
-# plt.hist(face2_igual, facecolor='blue')
-# plt.hist(face2_outro, facecolor='red')
-
-# plt.show()
-
-# import scikitplot as skplt
-
-# y_true = a # ground truth labels
-# y_probas = b # predicted probabilities generated by sklearn classifier
-# skplt.metrics.plot_roc_curve(y_true, y_probas)
-
-# plt.show()
