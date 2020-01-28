@@ -4,6 +4,7 @@
     #Métodos de Score
 
 # face verification with the VGGFace2 model
+import time
 from PIL import Image
 from glob import glob
 from random import randint
@@ -26,8 +27,10 @@ from keras.preprocessing import image
 from sklearn.preprocessing import normalize
 import random
 
+inicio = time.time()
+
 direc_dataset = "/media/vitor/SHARE/DEV/Visão Computacional/dataset/lfw_eleicao_test1" #pasta contendo a pasta de cada pessoa
-date_save = "240120201520" # adicionar aqui a data e hora de realização do teste para salvar os dados correspondentes
+date_save = "202001271800" # adicionar aqui a data e hora de realização do teste para salvar os dados correspondentes
 
 def euclideanDistance(base, teste):
     var = base - teste
@@ -96,19 +99,16 @@ def dif_person(photo_1, photo_2, name_photo_1, name_photo_2, direc_dataset):
 
     face2_outro.append(dist_vgg2)
 
-    print("dist vgg2 ->", dist_vgg2)
+    print("dist dif vgg2 ->", dist_vgg2)
 
-            
 def same_person(path_person_list, name_person, direc_dataset):
 
-    print("\nSame Person = "+name_person)
+    # print("\nSame Person = "+name_person)
     
     list_comb = list(combinations(path_person_list, 2)) #gera lista de combinações entre duas fotos da mesma pessoa
     direct_by_person = direc_dataset+"/"+name_person
     len_list_comb = len(list_comb)
-    print(len_list_comb)
-
-    print("VggFace\n")
+    # print(len_list_comb)
 
     cont = 0 # contador de quantas combinações entre duas imagens iguais foram realizadas
 
@@ -122,31 +122,33 @@ def same_person(path_person_list, name_person, direc_dataset):
         # face_igual.append(dist_vgg)
         face2_igual.append(dist_vgg2)
 
-        print("dist vgg2", dist_vgg2)
+        print("dist same vgg2 ->", dist_vgg2)
 
     return cont
-
 
 def ger_pessoas(direc_dataset):
     
     all_persons = os.listdir(direc_dataset) # recebe o nome de cada pasta, onde se encontra cada pessoa
     name_person = [] #cria uma lista onde iremos armazenar o nome de cada pessoa (nome da pasta)
-    print(all_persons)
+    # print(all_persons)
     
-    # print("\n=============== *Same peoples* =================")
+    print("\n=============== *Same peoples* =================")
+    cont3 = 0
+    for i in range(len(all_persons)): # define quantas pastas serão percorridas
 
-    # for i in range(len(all_persons)): # define quantas pastas serão percorridas
-    #     name_person = all_persons[i] # a lista name_person recebe como parametro o nome correspondente na lista all_persons
+        name_person = all_persons[i] # a lista name_person recebe como parametro o nome correspondente na lista all_persons
         
-    #     path_person_list = os.listdir(direc_dataset+"/"+name_person) # lista o diretorio da pessoa
-    #     len_by_person = len(path_person_list) # guarda a quantidade de fotos contida em sua respectiva pasta
+        path_person_list = os.listdir(direc_dataset+"/"+name_person) # lista o diretorio da pessoa
+        len_by_person = len(path_person_list) # guarda a quantidade de fotos contida em sua respectiva pasta
 
-    #     if len_by_person > 1:
-    #         cont = same_person(path_person_list, name_person, direc_dataset)
+        if len_by_person > 1:
+            cont2 = same_person(path_person_list, name_person, direc_dataset)
 
-    # # Save the data as array 
-    # data_face2_igual = np.asarray(face2_igual)
-    # np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/data_face2_igual_'+date_save, data_face2_igual) # salva os arrays de distancia
+        cont3 = cont3 + cont2     
+
+    # Save the data as array 
+    data_face2_igual = np.asarray(face2_igual)
+    np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/arrays_saida/data_face2_igual_'+date_save, data_face2_igual) # salva os arrays de distancia
 
     print("\n=============== *Different peoples* =================")
 
@@ -159,68 +161,47 @@ def ger_pessoas(direc_dataset):
 
         array_all_pic.append(path_person_list)
 
-    print(array_all_pic)
-    print(array_all_pic[0])
-    print(array_all_pic[3])
+    for i in range(cont3):
 
-    # name_photo_1 = photo_1[:-9] # fatia a string eliminando o últimos 9 caracteres, que contem o nome da pasta de cada pessoa, restando apenas o nome
-    # number_photo_1 = photo_1[-8:-4] # fatia a string, gravando apenas o número da foto
-
-    # print(name_photo_1)
-    # print(number_photo_1)
-
-    # Dict[name_photo_1] = number_photo_1
-
-    # list_all_compara = []
-
-    # for i in range(20):
+        result = []
+        photo = []
+        while len(result) != 2:
+            n = randint(0, len(array_all_pic)-1)
+            if n not in result:
+                person_1_pos = array_all_pic[n]
+                n_2 = randint(0, len(person_1_pos)-1)
+                photo.append(person_1_pos[n_2])
+                result.append(n)
         
-    #     photo_1_pos = randint(0, len(array_all_pic)-1) # recebe um numero aleatorio que indicará qual imagem (na lista de todas as imagens) iremos usar para a comparação
-    #     photo_1 = array_all_pic[photo_1_pos] # a photo_1 vai ser a photo que se encontra na posição do numero aleatorio no array que contem todas as fotos
+        photo_1 = photo[0] # a photo_1 vai ser a photo que se encontra na posição do numero aleatorio no array que contem todas as fotos
+        photo_2 = photo[1]
 
-    #     photo_2_pos = randint(0, len(array_all_pic)-1) # recebe um numero aleatorio que indicará qual imagem (na lista de todas as imagens) iremos usar para a comparação
-    #     photo_2 = array_all_pic[photo_2_pos] # a photo_1 vai ser a photo que se encontra na posição do numero aleatorio no array que contem todas as fotos
-
-    #     list_all_compara.append()
-        
-
-    #     print(list_all_compara)
-
-        # photo_2_pos = randint(0, len(array_all_pic)-1)
-
-        # print(photo_1_pos)
-        # print(photo_2_pos)
-
-        # photo_1 = array_all_pic[photo_1_pos] # a photo_1 vai ser a photo que se encontra na posição do numero aleatorio no array que contem todas as fotos
-        # photo_2 = array_all_pic[photo_2_pos]
-
-        # name_photo_1 = photo_1[:-9] # fatia a string eliminando o últimos 9 caracteres, que contem o nome da pasta de cada pessoa, restando apenas o nome
-        # name_photo_2 = photo_2[:-9]
+        name_photo_1 = photo_1[:-9] # fatia a string eliminando o últimos 9 caracteres, que contem o nome da pasta de cada pessoa, restando apenas o nome
+        name_photo_2 = photo_2[:-9]
 
         # print("Pessoa 1: "+name_photo_1)
         # print("Pessoa 2: "+name_photo_2)
 
-
-    #     dif_person(photo_1, photo_2, name_photo_1, name_photo_2, direc_dataset)
+        dif_person(photo_1, photo_2, name_photo_1, name_photo_2, direc_dataset)
 
     # print("\nLista VGGFace2 de faces iguais\n", face2_igual)
-    # # print("Lista VGGFace de faces iguais\n", face_igual)
+    # print("Lista VGGFace de faces iguais\n", face_igual)
 
     # print("\nLista VGGFace2 de faces diferentes\n", face2_outro)
-    # # print("Lista VGGFace2 de faces diferentes\n", face_outro)
+    # print("Lista VGGFace2 de faces diferentes\n", face_outro)
 
-    # # data_face_igual = np.asarray(face_igual)
-    # # data_face_outro = np.asarray(face_outro)
+    # data_face_igual = np.asarray(face_igual)
+    # data_face_outro = np.asarray(face_outro)
 
     # # Save the data as array 
-    # data_face2_outro = np.asarray(face2_outro)
-
-    # print(cont)
+    data_face2_outro = np.asarray(face2_outro)
     
-    # np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/data_face_igual_01121625', data_face_igual)
-    # np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/data_face_outro_01121625', data_face_outro)
-    # np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/data_face2_outro_'+date_save, data_face2_outro)
+    # # np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/data_face_igual_01121625', data_face_igual)
+    # # np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/data_face_outro_01121625', data_face_outro)
+    np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/arrays_saida/data_face2_outro_'+date_save, data_face2_outro)
 
 
 ger_pessoas(direc_dataset)
 
+fim = time.time()
+print(fim - inicio)

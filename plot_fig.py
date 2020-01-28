@@ -11,8 +11,8 @@ from sklearn import metrics
 from sklearn.metrics import roc_curve, auc, roc_auc_score
 from scipy.spatial import distance
 
-face2_igual = np.load('arrays_saida/data_face2_igual_2016.npy') # load
-face2_outro = np.load('arrays_saida/data_face2_outro_2016.npy') # load
+face2_igual = np.load('arrays_saida/data_face2_igual_270120201652.npy') # load
+face2_outro = np.load('arrays_saida/data_face2_outro_270120201652.npy') # load
 face_igual = np.load('arrays_saida/data_face_igual_2016.npy') # load
 face_outro = np.load('arrays_saida/data_face_outro_2016.npy') # load
 
