@@ -30,7 +30,7 @@ import random
 inicio = time.time()
 
 direc_dataset = "/media/vitor/SHARE/DEV/Visão Computacional/dataset/lfw_eleicao_test1" #pasta contendo a pasta de cada pessoa
-date_save = "202001271800" # adicionar aqui a data e hora de realização do teste para salvar os dados correspondentes
+date_save = "290120200902" # adicionar aqui a data e hora de realização do teste para salvar os dados correspondentes
 
 def euclideanDistance(base, teste):
     var = base - teste
