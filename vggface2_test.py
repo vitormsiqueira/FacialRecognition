@@ -30,7 +30,7 @@ import random
 inicio = time.time()
 
 direc_dataset = "/media/vitor/SHARE/DEV/Visão Computacional/dataset/lfw_eleicao_test1" #pasta contendo a pasta de cada pessoa
-date_save = "290120200902" # adicionar aqui a data e hora de realização do teste para salvar os dados correspondentes
+date_save = "12022020-14pic" # adicionar aqui a data e hora de realização do teste para salvar os dados correspondentes
 
 def euclideanDistance(base, teste):
     var = base - teste
@@ -78,11 +78,15 @@ def read_image(nome, direct_by_person):
 
 def veri_face(photo1, photo2, direct_by_person, direct_by_person2):
 
+    array_pred = []
     # preds1 = vggface_model.predict(read_image(photo1, direct_by_person))
     # preds2 = vggface_model.predict(read_image(photo2, direct_by_person2))
 
     preds11 = vggface2_model.predict(read_image(photo1, direct_by_person))
     preds22 = vggface2_model.predict(read_image(photo2, direct_by_person2))
+
+    array_pred.append(preds11)
+    array_pred.append(preds22)
 
     # distancia_vgg = euclideanDistance(preds1, preds2)
     distancia_vgg2 = euclideanDistance(preds11, preds22)
@@ -150,39 +154,39 @@ def ger_pessoas(direc_dataset):
     data_face2_igual = np.asarray(face2_igual)
     np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/arrays_saida/data_face2_igual_'+date_save, data_face2_igual) # salva os arrays de distancia
 
-    print("\n=============== *Different peoples* =================")
+    # print("\n=============== *Different peoples* =================")
 
-    array_all_pic = [] # array contendo todas as fotos    
+    # array_all_pic = [] # array contendo todas as fotos    
 
     # aqui junto todas as fotos do dataset em um único vetor
-    for i in range(len(all_persons)): # pode demorar muito dependendo da quantidade de combinações
-        name_person = all_persons[i]
-        path_person_list = os.listdir(direc_dataset+"/"+name_person) # lista o diretorio da pessoa
+    # for i in range(len(all_persons)): # pode demorar muito dependendo da quantidade de combinações
+    #     name_person = all_persons[i]
+    #     path_person_list = os.listdir(direc_dataset+"/"+name_person) # lista o diretorio da pessoa
 
-        array_all_pic.append(path_person_list)
+    #     array_all_pic.append(path_person_list)
 
-    for i in range(cont3):
+    # for i in range(cont3):
 
-        result = []
-        photo = []
-        while len(result) != 2:
-            n = randint(0, len(array_all_pic)-1)
-            if n not in result:
-                person_1_pos = array_all_pic[n]
-                n_2 = randint(0, len(person_1_pos)-1)
-                photo.append(person_1_pos[n_2])
-                result.append(n)
+    #     result = []
+    #     photo = []
+    #     while len(result) != 2:
+    #         n = randint(0, len(array_all_pic)-1)
+    #         if n not in result:
+    #             person_1_pos = array_all_pic[n]
+    #             n_2 = randint(0, len(person_1_pos)-1)
+    #             photo.append(person_1_pos[n_2])
+    #             result.append(n)
         
-        photo_1 = photo[0] # a photo_1 vai ser a photo que se encontra na posição do numero aleatorio no array que contem todas as fotos
-        photo_2 = photo[1]
+    #     photo_1 = photo[0] # a photo_1 vai ser a photo que se encontra na posição do numero aleatorio no array que contem todas as fotos
+    #     photo_2 = photo[1]
 
-        name_photo_1 = photo_1[:-9] # fatia a string eliminando o últimos 9 caracteres, que contem o nome da pasta de cada pessoa, restando apenas o nome
-        name_photo_2 = photo_2[:-9]
+    #     name_photo_1 = photo_1[:-9] # fatia a string eliminando o últimos 9 caracteres, que contem o nome da pasta de cada pessoa, restando apenas o nome
+    #     name_photo_2 = photo_2[:-9]
 
-        # print("Pessoa 1: "+name_photo_1)
-        # print("Pessoa 2: "+name_photo_2)
+    #     # print("Pessoa 1: "+name_photo_1)
+    #     # print("Pessoa 2: "+name_photo_2)
 
-        dif_person(photo_1, photo_2, name_photo_1, name_photo_2, direc_dataset)
+    #     dif_person(photo_1, photo_2, name_photo_1, name_photo_2, direc_dataset)
 
     # print("\nLista VGGFace2 de faces iguais\n", face2_igual)
     # print("Lista VGGFace de faces iguais\n", face_igual)
@@ -194,11 +198,11 @@ def ger_pessoas(direc_dataset):
     # data_face_outro = np.asarray(face_outro)
 
     # # Save the data as array 
-    data_face2_outro = np.asarray(face2_outro)
+    # data_face2_outro = np.asarray(face2_outro)
     
-    # # np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/data_face_igual_01121625', data_face_igual)
-    # # np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/data_face_outro_01121625', data_face_outro)
-    np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/arrays_saida/data_face2_outro_'+date_save, data_face2_outro)
+    # # # np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/data_face_igual_01121625', data_face_igual)
+    # # # np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/data_face_outro_01121625', data_face_outro)
+    # np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/arrays_saida/data_face2_outro_'+date_save, data_face2_outro)
 
 
 ger_pessoas(direc_dataset)
