@@ -12,7 +12,7 @@ vggface2_model = Model(inputs=vggface2_model.layers[0].input, outputs=vggface2_m
 vggface2_model.summary()
 
 direc_dataset = "/media/vitor/SHARE/DEV/Visão Computacional/dataset/lfw_eleicao_test1/" #pasta contendo a pasta de cada pessoa
-all_persons = os.listdir(direc_dataset)
+list_people = os.listdir(direc_dataset)
 
 array_kmeans = []
 array_preds = []
@@ -27,8 +27,8 @@ def extrair(img_path):
 
     return array_preds
 
-for i in sorted(range(len(all_persons))):
-    person_path = direc_dataset+'/'+all_persons[i]
+for i in sorted(range(len(list_people))):
+    person_path = direc_dataset+'/'+list_people[i]
     current_person = os.listdir(person_path)
     for f in sorted(current_person):
         array_kmeans.append(i)
@@ -41,6 +41,6 @@ for i in sorted(range(len(all_persons))):
 data_kmeans_features = np.asarray(array_kmeans)
 print(array_kmeans)
 print(len(array_kmeans))
-np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/kmeans/004data_face2_features', data_face2_features) # salva os arrays de distancia
-np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/kmeans/004data_kmeans', data_face2_features) # salva os arrays de distancia
+np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/kmeans/006data_face2_features', data_face2_features) # salva os arrays de distancia
+np.save('/media/vitor/SHARE/DEV/Visão Computacional/siamese_net/kmeans/006data_kmeans', array_kmeans) # salva os arrays de distancia
 

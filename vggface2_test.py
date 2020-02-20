@@ -132,15 +132,15 @@ def same_person(path_person_list, name_person, direc_dataset):
 
 def ger_pessoas(direc_dataset):
     
-    all_persons = os.listdir(direc_dataset) # recebe o nome de cada pasta, onde se encontra cada pessoa
+    all_people = os.listdir(direc_dataset) # recebe o nome de cada pasta, onde se encontra cada pessoa
     name_person = [] #cria uma lista onde iremos armazenar o nome de cada pessoa (nome da pasta)
-    # print(all_persons)
+    # print(all_people)
     
     print("\n=============== *Same peoples* =================")
     cont3 = 0
-    for i in range(len(all_persons)): # define quantas pastas serão percorridas
+    for i in range(len(all_people)): # define quantas pastas serão percorridas
 
-        name_person = all_persons[i] # a lista name_person recebe como parametro o nome correspondente na lista all_persons
+        name_person = all_people[i] # a lista name_person recebe como parametro o nome correspondente na lista all_people
         
         path_person_list = os.listdir(direc_dataset+"/"+name_person) # lista o diretorio da pessoa
         len_by_person = len(path_person_list) # guarda a quantidade de fotos contida em sua respectiva pasta
@@ -159,8 +159,8 @@ def ger_pessoas(direc_dataset):
     # array_all_pic = [] # array contendo todas as fotos    
 
     # aqui junto todas as fotos do dataset em um único vetor
-    # for i in range(len(all_persons)): # pode demorar muito dependendo da quantidade de combinações
-    #     name_person = all_persons[i]
+    # for i in range(len(all_people)): # pode demorar muito dependendo da quantidade de combinações
+    #     name_person = all_people[i]
     #     path_person_list = os.listdir(direc_dataset+"/"+name_person) # lista o diretorio da pessoa
 
     #     array_all_pic.append(path_person_list)
